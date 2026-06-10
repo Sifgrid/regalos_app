@@ -24,6 +24,7 @@ def load_gifts() -> List[GiftItem]:
             GiftItem(
                 id=g["id"],
                 name=g["name"],
+                description=g.get("description", ""),
                 url=g["url"],
                 price=g["price"],
                 contributions=contributions
@@ -42,6 +43,7 @@ def save_gifts(gifts: List[GiftItem]) -> None:
             "name": g.name,
             "url": g.url,
             "price": g.price,
+            "description": g.description,
             "contributions": [c.__dict__ for c in g.contributions]
         })
 

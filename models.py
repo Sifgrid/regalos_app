@@ -32,12 +32,13 @@ class GiftItem:
         return max(self.price - self.total_contributed, 0.0)
 
 
-def create_gift(name: str, url: str, price: float) -> GiftItem:
+def create_gift(name: str, url: str, price: float, description: str = "") -> GiftItem:
     return GiftItem(
         id=str(uuid.uuid4()),
         name=name,
         url=url,
         price=price,
+        description=description,
         contributions=[]
     )
 

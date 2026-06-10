@@ -3,6 +3,8 @@ import services
 from config import APP_TITLE, CURRENCY
 from services import yen_to_eur_with_tva
 
+ADMIN_PASSWORD = "admin3009" 
+
 st.set_page_config(page_title=APP_TITLE, layout="wide")
 
 
@@ -54,7 +56,6 @@ def contribution_form():
                 contribution = services.add_contribution(gift_id, amount, contributor_name, anonymous)
                 st.success(f"Contribución registrada: {contribution.amount:.2f}{CURRENCY}")
 
-
 def gifts_table():
     st.subheader("Resumen de regalos")
     gifts = services.get_all_gifts()
@@ -67,10 +68,10 @@ def gifts_table():
     for g in gifts:
         data.append({
             "Nombre": g.name,
-            "Precio total (JPY)": f"¥{g.price:.2f}",
-            "Precio con TVA (EUR)": f"{yen_to_eur_with_tva(g.price):.2f} €",
-            "Contribuido": f"{g.total_contributed:.2f}{CURRENCY}",
-            "Restante": f"{g.remaining:.2f}{CURRENCY}",
+            "Precio (JPY)": f"¥{g.price:.2f}",
+            "Precio con TVA (EUR)": f"{services.yen_to_eur_with_tva(g.price):.2f} €",
+            "Contribuido (JPY)": f"{g.total_contributed:.2f}",
+            "Restante (JPY)": f"{g.remaining:.2f}",
             "URL": g.url
         })
 
@@ -88,11 +89,12 @@ def gifts_table():
                 display_name = "Anónimo" if c.anonymous or not c.contributor_name else c.contributor_name
                 rows.append({
                     "Nombre": display_name,
-                    "Cantidad": f"{c.amount:.2f}{CURRENCY}",
+                    "Cantidad (JPY)": f"{c.amount:.2f}",
                     "Fecha": c.created_at
                 })
 
             st.table(rows)
+
 
 
 def main():
@@ -100,7 +102,10 @@ def main():
 
     col1, col2 = st.columns(2)
     with col1:
+    pwd = st.text_input("Admin password", type="password")
+    if pwd == ADMIN_PASSWORD:
         gift_creation_form()
+
     with col2:
         contribution_form()
 

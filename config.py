@@ -1,2 +1,2 @@
-APP_TITLE = "Lista de regalos colaborativa"
+APP_TITLE = "Lista de Regalos Colaborativa"
 CURRENCY = "¥"

@@ -137,6 +137,5 @@ def main():
 
             gift_creation_form()
 
-
 if __name__ == "__main__":
     main()

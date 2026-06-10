@@ -17,9 +17,14 @@ def show_header():
     st.title(APP_TITLE)
     st.write("Crea una lista de regalos y permite que otros contribuyan con la cantidad que quieran.")
 
+if "is_admin" not in st.session_state:
+    st.session_state.is_admin = False
 
 def gift_creation_form():
     st.subheader("Añadir nuevo regalo")
+    
+    description = st.text_area("¿Para qué sirve este regalo?")
+
     with st.form("new_gift_form", clear_on_submit=True):
         name = st.text_input("Nombre del regalo")
         url = st.text_input("URL del producto")
@@ -30,7 +35,7 @@ def gift_creation_form():
             if not name or price <= 0:
                 st.error("Indica un nombre y un precio válido.")
             else:
-                new_gift = services.add_gift(name, url, price)
+                new_gift = services.add_gift(name, url, price, description)
                 st.session_state.gifts.append(new_gift)
                 st.success("Regalo añadido correctamente.")
 
@@ -78,6 +83,7 @@ def gifts_table():
     for g in gifts:
         data.append({
             "Nombre": g.name,
+            "Descripción": g.description,
             "Precio (JPY)": f"¥{g.price:.2f}",
             "Precio con TVA (EUR)": f"{services.yen_to_eur_with_tva(g.price):.2f} €",
             "Contribuido": f"{g.total_contributed:.2f}{CURRENCY}",
@@ -119,13 +125,17 @@ def main():
 
     # --- TAB ADMIN ---
     with tab_admin:
-        pwd = st.text_input("Contraseña de administrador", type="password")
-
-        if pwd == ADMIN_PASSWORD:
-            st.success("Acceso concedido")
-            gift_creation_form()
+        if not st.session_state.is_admin:
+            pwd = st.text_input("Contraseña de administrador", type="password")
+            if pwd == ADMIN_PASSWORD:
+                st.session_state.is_admin = True
+                st.success("Acceso concedido")
         else:
-            st.info("Introduce la contraseña para añadir regalos.")
+            st.success("Modo administrador activo")
+            if st.button("Cerrar sesión"):
+                st.session_state.is_admin = False
+
+            gift_creation_form()
 
 
 if __name__ == "__main__":

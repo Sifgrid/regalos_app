@@ -20,7 +20,8 @@ class GiftItem:
     name: str
     url: str
     price: float
-    contributions: List[Contribution] = field(default_factory=list)
+    description: str
+    contributions: List[Contribution]
 
     @property
     def total_contributed(self) -> float:

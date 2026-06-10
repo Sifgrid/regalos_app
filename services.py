@@ -8,16 +8,19 @@ def get_all_gifts() -> List[GiftItem]:
     return repository.load_gifts()
 
 
-def add_gift(name, url, price):
+def add_gift(name, url, price, description):
     gifts = repository.load_gifts()
 
     new_gift = GiftItem(
-        id=str(uuid.uuid4()),
-        name=name,
-        url=url,
-        price=price,
-        contributions=[]
+    id=str(uuid.uuid4()),
+    name=name,
+    url=url,
+    price=price,
+    description=description,
+    contributions=[]
     )
+
+
 
     gifts.append(new_gift)
     repository.save_gifts(gifts)

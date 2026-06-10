@@ -130,6 +130,7 @@ def main():
                 st.success("Acceso concedido")
         else:
             st.success("Modo administrador activo")
+            st.write("DEBUG: is_admin =", st.session_state.is_admin)
             if st.button("Cerrar sesión"):
                 st.session_state.is_admin = False
 

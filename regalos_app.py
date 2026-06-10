@@ -70,8 +70,8 @@ def gifts_table():
             "Nombre": g.name,
             "Precio (JPY)": f"¥{g.price:.2f}",
             "Precio con TVA (EUR)": f"{services.yen_to_eur_with_tva(g.price):.2f} €",
-            "Contribuido (JPY)": f"{g.total_contributed:.2f}",
-            "Restante (JPY)": f"{g.remaining:.2f}",
+            "Contribuido": f"{g.total_contributed:.2f}{CURRENCY}",
+            "Restante (EUR)": f"{services.yen_to_eur_with_tva(g.remaining):.2f} €",,
             "URL": g.url
         })
 
@@ -96,20 +96,26 @@ def gifts_table():
             st.table(rows)
 
 
-
 def main():
     show_header()
 
-    # Opcional: modo admin
-    admin_pwd = st.text_input("Admin password (solo para añadir regalos)", type="password")
-    if admin_pwd == ADMIN_PASSWORD:
-        gift_creation_form()
+    tab_public, tab_admin = st.tabs(["🎁 Lista de regalos", "🔐 Admin"])
 
-    contribution_form()
+    # --- TAB PÚBLICA ---
+    with tab_public:
+        contribution_form()
+        st.markdown("---")
+        gifts_table()
 
-    st.markdown("---")
-    gifts_table()
+    # --- TAB ADMIN ---
+    with tab_admin:
+        pwd = st.text_input("Contraseña de administrador", type="password")
 
+        if pwd == ADMIN_PASSWORD:
+            st.success("Acceso concedido")
+            gift_creation_form()
+        else:
+            st.info("Introduce la contraseña para añadir regalos.")
 
 
 if __name__ == "__main__":

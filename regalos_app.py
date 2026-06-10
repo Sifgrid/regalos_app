@@ -100,17 +100,16 @@ def gifts_table():
 def main():
     show_header()
 
-    col1, col2 = st.columns(2)
-    with col1:
-    pwd = st.text_input("Admin password", type="password")
-    if pwd == ADMIN_PASSWORD:
+    # Opcional: modo admin
+    admin_pwd = st.text_input("Admin password (solo para añadir regalos)", type="password")
+    if admin_pwd == "TU_CLAVE_SECRETA":
         gift_creation_form()
 
-    with col2:
-        contribution_form()
+    contribution_form()
 
     st.markdown("---")
     gifts_table()
+
 
 
 if __name__ == "__main__":

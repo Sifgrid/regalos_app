@@ -4,7 +4,13 @@
         {
             "label": "Check Python Syntax",
             "type": "shell",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"(Get-ChildItem -Recurse -Filter *.py).FullName | ForEach-Object { python -m py_compile $_ }\"",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": ["/c"]
+                }
+            },
+            "command": "for /r %f in (*.py) do @echo %f | findstr /v /i \".venv\" >nul && python -m py_compile \"%f\"",
             "group": {
                 "kind": "build",
                 "isDefault": true

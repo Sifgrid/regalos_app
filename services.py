@@ -1,7 +1,7 @@
 from typing import List, Optional
 from models import GiftItem, create_gift, create_contribution
 import repository
-
+import requests
 
 def get_all_gifts() -> List[GiftItem]:
     return repository.load_gifts()
@@ -31,3 +31,21 @@ def add_contribution(gift_id: str, amount: float, contributor_name: Optional[str
 
     repository.save_gifts(gifts)
     return contribution
+
+
+def yen_to_eur_with_tva(amount_jpy: float) -> float:
+    """
+    Convierte yenes (JPY) a euros (EUR) y aplica TVA del 20%.
+    """
+    try:
+        url = "https://api.exchangerate.host/convert?from=JPY&to=EUR"
+        response = requests.get(url, timeout=5).json()
+        rate = response["info"]["rate"]
+        eur = amount_jpy * rate
+        return eur * 1.20  # aplicar TVA del 20%
+    except Exception:
+        # fallback si la API falla
+        fallback_rate = 0.0060
+        eur = amount_jpy * fallback_rate
+        return eur * 1.20
+

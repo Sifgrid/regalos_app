@@ -1,7 +1,7 @@
 import streamlit as st
 import services
 from config import APP_TITLE, CURRENCY
-
+from services import yen_to_eur_with_tva
 
 st.set_page_config(page_title=APP_TITLE, layout="wide")
 
@@ -67,7 +67,8 @@ def gifts_table():
     for g in gifts:
         data.append({
             "Nombre": g.name,
-            "Precio total": f"{g.price:.2f}{CURRENCY}",
+            "Precio total (JPY)": f"¥{g.price:.2f}",
+            "Precio con TVA (EUR)": f"{yen_to_eur_with_tva(g.price):.2f} €",
             "Contribuido": f"{g.total_contributed:.2f}{CURRENCY}",
             "Restante": f"{g.remaining:.2f}{CURRENCY}",
             "URL": g.url
@@ -109,3 +110,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

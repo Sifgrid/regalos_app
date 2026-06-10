@@ -3,7 +3,7 @@ import services
 from config import APP_TITLE, CURRENCY
 from services import yen_to_eur_with_tva
 
-ADMIN_PASSWORD = "admin3009" 
+ADMIN_PASSWORD = "admin3009"
 
 # Inicializar la lista de regalos en session_state
 if "gifts" not in st.session_state:
@@ -22,13 +22,13 @@ if "is_admin" not in st.session_state:
 
 def gift_creation_form():
     st.subheader("Añadir nuevo regalo")
-    
-    description = st.text_area("¿Para qué sirve este regalo?")
 
     with st.form("new_gift_form", clear_on_submit=True):
         name = st.text_input("Nombre del regalo")
         url = st.text_input("URL del producto")
-        price = st.number_input("Precio total", min_value=0.0, step=1.0, format="%.2f")
+        price = st.number_input("Precio total", min_value=0.0, step=1.0)
+        description = st.text_area("¿Para qué sirve este regalo?")
+
         submitted = st.form_submit_button("Guardar regalo")
 
         if submitted:
@@ -38,8 +38,6 @@ def gift_creation_form():
                 new_gift = services.add_gift(name, url, price, description)
                 st.session_state.gifts.append(new_gift)
                 st.success("Regalo añadido correctamente.")
-
-
 
 def contribution_form():
     st.subheader("Hacer una contribución")

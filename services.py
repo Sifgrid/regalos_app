@@ -63,3 +63,13 @@ def yen_to_eur_with_tva(amount_jpy: float) -> float:
         eur = amount_jpy * fallback_rate
         return eur * 1.20
 
+def update_gift(gift_id, name, url, price, description):
+    gifts = repository.load_gifts()
+    for g in gifts:
+        if g["id"] == gift_id:
+            g["name"] = name
+            g["url"] = url
+            g["price"] = price
+            g["description"] = description
+            break
+    repository.save_gifts(gifts)

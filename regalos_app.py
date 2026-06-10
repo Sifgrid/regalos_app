@@ -12,6 +12,38 @@ if "gifts" not in st.session_state:
 
 st.set_page_config(page_title=APP_TITLE, layout="wide")
 
+def edit_gift_form():
+    st.subheader("Editar regalo")
+
+    gifts = st.session_state.gifts
+    if not gifts:
+        st.info("No hay regalos para editar.")
+        return
+
+    gift_dict = {g.name: g for g in gifts}
+    selected_name = st.selectbox("Selecciona un regalo", list(gift_dict.keys()))
+    gift = gift_dict[selected_name]
+
+    with st.form("edit_gift_form"):
+        new_name = st.text_input("Nombre del regalo", value=gift.name)
+        new_url = st.text_input("URL del producto", value=gift.url)
+        new_price = st.number_input("Precio total", min_value=0.0, step=1.0, value=gift.price)
+        new_description = st.text_area("Descripción", value=gift.description)
+
+        submitted = st.form_submit_button("Guardar cambios")
+
+        if submitted:
+            services.update_gift(
+                gift.id,
+                new_name,
+                new_url,
+                new_price,
+                new_description
+            )
+            st.session_state.gifts = services.get_all_gifts()
+            st.success("Regalo actualizado correctamente.")
+
+
 
 def show_header():
     st.title(APP_TITLE)
@@ -133,7 +165,13 @@ def main():
             if st.button("Cerrar sesión"):
                 st.session_state.is_admin = False
 
+            st.markdown("### ➕ Añadir nuevo regalo")
             gift_creation_form()
+
+            st.markdown("---")
+            st.markdown("### ✏️ Editar regalo existente")
+            edit_gift_form()
+
 
 if __name__ == "__main__":
     main()

@@ -48,3 +48,4 @@ def save_gifts(gifts: List[GiftItem]) -> None:
         })
 
     GIFTS_FILE.write_text(json.dumps(serializable, indent=2, ensure_ascii=False), encoding="utf-8")
+

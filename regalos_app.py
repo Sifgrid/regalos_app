@@ -102,7 +102,7 @@ def main():
 
     # Opcional: modo admin
     admin_pwd = st.text_input("Admin password (solo para añadir regalos)", type="password")
-    if admin_pwd == "TU_CLAVE_SECRETA":
+    if admin_pwd == ADMIN_PASSWORD:
         gift_creation_form()
 
     contribution_form()

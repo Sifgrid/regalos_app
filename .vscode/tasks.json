@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Check Python Syntax",
+            "type": "shell",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"(Get-ChildItem -Recurse -Filter *.py).FullName | ForEach-Object { python -m py_compile $_ }\"",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

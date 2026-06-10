@@ -71,7 +71,7 @@ def gifts_table():
             "Precio (JPY)": f"¥{g.price:.2f}",
             "Precio con TVA (EUR)": f"{services.yen_to_eur_with_tva(g.price):.2f} €",
             "Contribuido": f"{g.total_contributed:.2f}{CURRENCY}",
-            "Restante (EUR)": f"{services.yen_to_eur_with_tva(g.remaining):.2f} €",,
+            "Restante (EUR)": f"{services.yen_to_eur_with_tva(g.remaining):.2f} €",
             "URL": g.url
         })
 

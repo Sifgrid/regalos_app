@@ -5,6 +5,11 @@ from services import yen_to_eur_with_tva
 
 ADMIN_PASSWORD = "admin3009" 
 
+# Inicializar la lista de regalos en session_state
+if "gifts" not in st.session_state:
+    st.session_state.gifts = services.get_all_gifts()
+
+
 st.set_page_config(page_title=APP_TITLE, layout="wide")
 
 
@@ -25,13 +30,15 @@ def gift_creation_form():
             if not name or price <= 0:
                 st.error("Indica un nombre y un precio válido.")
             else:
-                services.add_gift(name, url, price)
+                new_gift = services.add_gift(name, url, price)
+                st.session_state.gifts.append(new_gift)
                 st.success("Regalo añadido correctamente.")
+
 
 
 def contribution_form():
     st.subheader("Hacer una contribución")
-    gifts = services.get_all_gifts()
+    gifts = st.session_state.gifts
 
     if not gifts:
         st.info("No hay regalos todavía.")
@@ -53,12 +60,15 @@ def contribution_form():
             if amount <= 0:
                 st.error("La cantidad debe ser mayor que 0.")
             else:
-                contribution = services.add_contribution(gift_id, amount, contributor_name, anonymous)
-                st.success(f"Contribución registrada: {contribution.amount:.2f}{CURRENCY}")
+                services.add_contribution(gift_id, amount, contributor_name, anonymous)
+                st.session_state.gifts = services.get_all_gifts()
+                st.success("Contribución registrada correctamente.")
+
+
 
 def gifts_table():
     st.subheader("Resumen de regalos")
-    gifts = services.get_all_gifts()
+    gifts = st.session_state.gifts
 
     if not gifts:
         st.info("No hay regalos todavía.")

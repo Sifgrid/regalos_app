@@ -1,4 +1,5 @@
 from typing import List, Optional
+import uuid
 from models import GiftItem, create_gift, create_contribution
 import repository
 import requests
@@ -7,12 +8,22 @@ def get_all_gifts() -> List[GiftItem]:
     return repository.load_gifts()
 
 
-def add_gift(name: str, url: str, price: float) -> GiftItem:
+def add_gift(name, url, price):
     gifts = repository.load_gifts()
-    gift = create_gift(name, url, price)
-    gifts.append(gift)
+
+    new_gift = GiftItem(
+        id=str(uuid.uuid4()),
+        name=name,
+        url=url,
+        price=price,
+        contributions=[]
+    )
+
+    gifts.append(new_gift)
     repository.save_gifts(gifts)
-    return gift
+
+    return new_gift
+
 
 
 def add_contribution(gift_id: str, amount: float, contributor_name: Optional[str], anonymous: bool):
